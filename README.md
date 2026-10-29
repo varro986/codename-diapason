@@ -39,16 +39,18 @@ Nothing depends on Diapason.
 ```
 codename-diapason/
 |-- README.md         what the project is
-|-- AGENTS.md         rules, architecture and agentic workflow, for any coding assistant
+|-- AGENTS.md         rules for coding assistants: common rules, then the product's own
 |-- CLAUDE.md         shell for Claude Code (@AGENTS.md)
-|-- docs/             data contract and decisions
+|-- CONTRIBUTING.md   how to contribute (specs first, GitHub Flow)
+|-- LICENSE           MIT
+|-- specs/            ideas and open questions; data contract, requirements, features and decisions as they come
 |-- .githooks/        pre-commit: gitleaks on staged files
 |-- .github/          CI: gitleaks on push and pull request
-|-- .gitleaks.toml    secret and personal-data rules
+|-- .gitleaks.toml    secret scan rules
 \-- .gitignore        keeps workbooks, exports and local data out of git
 ```
 
-Four layers, detailed in `AGENTS.md`: import (workbook to domain types), domain (pure calculations, one module per
+Four layers (to be detailed in `specs/architecture.md`): import (workbook to domain types), domain (pure calculations, one module per
 feature), API, UI. Cost rule: a standard cost per career level; when a person's real cost is known, it wins.
 
 ## Rules
@@ -65,11 +67,14 @@ Nothing to install yet. To enable the secret scan locally: install gitleaks, the
 
 ## Agents
 
-See `AGENTS.md`, section "Agentic workflow".
+See `AGENTS.md`, "Working with agents".
+
+## Miscellaneous
+
+Nothing yet.
 
 ## To do
 
-- Choose the stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language); record it in
-  `docs/decisions.md`.
-- Confirm the standard cost per career level and the workbook layout in `docs/data-contract.md`.
-- Choose the license.
+- Choose the stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language); record it as an ADR in
+  `specs/decisions/`.
+- Confirm the standard cost per career level and the workbook layout in `specs/data-contract.md`.
