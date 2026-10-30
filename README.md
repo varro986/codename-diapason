@@ -45,8 +45,8 @@ codename-diapason/
 |-- LICENSE           MIT
 |-- SECURITY.md       how to report a vulnerability
 |-- CODE_OF_CONDUCT.md
-|-- specs/            brainstorming.md; requirements, architecture and the rest as they come
-|   |-- features/     one folder per feature: spec.md, plan.md, tasks.md
+|-- specs/            brainstorming.md; architecture as it comes
+|   |-- features/     one folder per feature: spec.md, plan.md with its tasks
 |   \-- decisions/    ADRs
 |-- src/              source code
 |-- tests/            tests, from the acceptance criteria
@@ -66,23 +66,4 @@ feature), API, UI. Cost rule: a standard cost per career level; when a person's 
 - **No real data in the repository, ever**: no workbooks, names, costs or levels of real people, not even in notes or
   test fixtures. Tests use synthetic data only.
 - **Local only**: the app binds to `localhost`; no telemetry, no external calls.
-- Everything else: `AGENTS.md`.
 
-## Installation
-
-Nothing to install yet. To enable the secret scan locally: install gitleaks, then run
-`git config core.hooksPath .githooks`.
-
-## Agents
-
-See `AGENTS.md`, "Working with agents".
-
-## Miscellaneous
-
-Nothing yet.
-
-## To do
-
-- Choose the stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language); record it as an ADR in
-  `specs/decisions/`.
-- Confirm the standard cost per career level and the workbook layout in `specs/data-contract.md`.
