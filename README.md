@@ -23,7 +23,7 @@ Modules, in delivery order:
 
 ## Technologies
 
-To be decided (see "To do"). Any choice must run on Windows and Debian, locally, read `.xlsx`, and keep the domain
+To be decided (open question in `specs/brainstorming.md`). Any choice must run on Windows and Debian, locally, read `.xlsx`, and keep the domain
 logic free of I/O so it can be tested.
 
 ## Dependencies
@@ -41,7 +41,7 @@ codename-diapason/
 |-- README.md         what the project is
 |-- AGENTS.md         rules for coding assistants: common rules, then the product's own
 |-- CLAUDE.md         shell for Claude Code (@AGENTS.md)
-|-- CONTRIBUTING.md   how to contribute (specs first, GitHub Flow)
+|-- CONTRIBUTING.md   how to contribute (specs first, dev then main)
 |-- LICENSE           MIT
 |-- SECURITY.md       how to report a vulnerability
 |-- CODE_OF_CONDUCT.md
@@ -51,6 +51,8 @@ codename-diapason/
 |-- src/              source code
 |-- tests/            tests, from the acceptance criteria
 |-- tools/            deterministic tools for agents and people
+|-- cicd/             local checks run before every push (added with the first code)
+|-- .claude/          settings.json: permissions of coding assistants
 |-- .githooks/        pre-commit: gitleaks on staged files
 |-- .github/          CI (gitleaks), issue and PR templates, Dependabot
 |-- .gitleaks.toml    secret scan rules
