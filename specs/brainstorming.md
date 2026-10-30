@@ -1,7 +1,7 @@
 # Brainstorming
 
-Ideas and doubts before anything is decided. An idea becomes work only with the owner's yes; it is never deleted, only
-its status changes.
+Ideas and doubts waiting for a decision. An accepted idea leaves this file for its target; only proposed and rejected
+ideas stay.
 
 ## Ideas
 
@@ -16,6 +16,8 @@ its status changes.
 | IDEA-7 | 30/10 | Start with a minimal team of two people and their career levels, to build a first workbook and try the model end to end (synthetic people in the repository). (voice note 30/10) | proposed |
 | IDEA-8 | 30/10 | Draw the ideas and the layouts from the estimation workbook already used in practice: those layouts are what actually helps management; anonymised, with synthetic people. (voice note 30/10) | proposed |
 
+Last id: IDEA-8
+
 ## Open questions
 
 - The README describes one yearly workbook with sheets Levels, People, Engagements, Allocations, Actuals, Budget; the voice note one workbook per project with forecast and actual. Which model holds, or do both exist? (voice note 30/10)
@@ -23,3 +25,5 @@ its status changes.
 - Mapping workbooks to the people we know: real people are personal data and never enter the repository. Where does that mapping live? (voice note 30/10)
 - Still local only (localhost), as the README says? (voice note 30/10)
 - Which material will the owner share (the estimation workbook layout, the product side, the projects)? The voice note stops halfway. (voice note 30/10)
+- Which stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language)? To record as an ADR. (README, To do)
+- Confirm the standard cost per career level, together with the workbook layout of the data contract. (README, To do)

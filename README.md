@@ -23,7 +23,7 @@ Modules, in delivery order:
 
 ## Technologies
 
-To be decided (see "To do"). Any choice must run on Windows and Debian, locally, read `.xlsx`, and keep the domain
+To be decided (open question in `specs/brainstorming.md`). Any choice must run on Windows and Debian, locally, read `.xlsx`, and keep the domain
 logic free of I/O so it can be tested.
 
 ## Dependencies
@@ -41,16 +41,18 @@ codename-diapason/
 |-- README.md         what the project is
 |-- AGENTS.md         rules for coding assistants: common rules, then the product's own
 |-- CLAUDE.md         shell for Claude Code (@AGENTS.md)
-|-- CONTRIBUTING.md   how to contribute (specs first, GitHub Flow)
+|-- CONTRIBUTING.md   how to contribute (specs first, dev then main)
 |-- LICENSE           MIT
 |-- SECURITY.md       how to report a vulnerability
 |-- CODE_OF_CONDUCT.md
-|-- specs/            brainstorming.md; requirements, architecture and the rest as they come
-|   |-- features/     one folder per feature: spec.md, plan.md, tasks.md
+|-- specs/            brainstorming.md; architecture as it comes
+|   |-- features/     one folder per feature: spec.md, plan.md with its tasks
 |   \-- decisions/    ADRs
 |-- src/              source code
 |-- tests/            tests, from the acceptance criteria
 |-- tools/            deterministic tools for agents and people
+|-- cicd/             local checks run before every push (added with the first code)
+|-- .claude/          settings.json: permissions of coding assistants
 |-- .githooks/        pre-commit: gitleaks on staged files
 |-- .github/          CI (gitleaks), issue and PR templates, Dependabot
 |-- .gitleaks.toml    secret scan rules
@@ -66,23 +68,4 @@ feature), API, UI. Cost rule: a standard cost per career level; when a person's 
 - **No real data in the repository, ever**: no workbooks, names, costs or levels of real people, not even in notes or
   test fixtures. Tests use synthetic data only.
 - **Local only**: the app binds to `localhost`; no telemetry, no external calls.
-- Everything else: `AGENTS.md`.
 
-## Installation
-
-Nothing to install yet. To enable the secret scan locally: install gitleaks, then run
-`git config core.hooksPath .githooks`.
-
-## Agents
-
-See `AGENTS.md`, "Working with agents".
-
-## Miscellaneous
-
-Nothing yet.
-
-## To do
-
-- Choose the stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language); record it as an ADR in
-  `specs/decisions/`.
-- Confirm the standard cost per career level and the workbook layout in `specs/data-contract.md`.
