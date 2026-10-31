@@ -9,9 +9,13 @@ the team is shaped by career level, what a promotion would change, and how actua
 
 ## Description
 
-Diapason reads one yearly Excel workbook and shows coverage, margin, headcount and forecasts for a team of about 40
+Diapason reads one Excel workbook per engagement, each with a life of its own, in a common format with its forecast
+and its actuals, and shows coverage, margin, headcount and forecasts for a team of about 40
 people. It runs only on `localhost`: per-person costs are personal data, so nothing goes to the cloud and no real data
 ever enters this repository (see "Rules").
+
+The plan is kept by fortnight: a calendar gives the working hours of each fortnight (holidays included), and
+allocation times hours gives hours, days (hours / 8) and cost. Monthly and yearly views are sums of fortnights.
 
 Modules, in delivery order:
 
@@ -23,14 +27,15 @@ Modules, in delivery order:
 
 ## Technologies
 
-To be decided (open question in `specs/brainstorming.md`). Any choice must run on Windows and Debian, locally, read `.xlsx`, and keep the domain
-logic free of I/O so it can be tested.
+C# on the current .NET LTS: ASP.NET Core on `localhost`, Blazor UI, ClosedXML to read `.xlsx`, xUnit for tests;
+Windows and Debian. Why: `specs/decisions/0001-stack-csharp-blazor.md`.
 
 ## Dependencies
 
 | From | What it uses | Type |
 |---|---|---|
-| Yearly Excel workbook | sheets `Levels`, `People`, `Engagements`, `Allocations`, `Actuals`, `Budget` | data file, kept outside the repo |
+| Engagement workbooks | one `.xlsx` per engagement, layout in `specs/data-contract.md` | data files, kept outside the repo |
+| Team registry | one local `.xlsx`: people, level history and rates, each dated; layout in `specs/data-contract.md` | data file, kept outside the repo |
 
 Nothing depends on Diapason.
 
@@ -61,7 +66,14 @@ codename-diapason/
 ```
 
 Four layers (to be detailed in `specs/architecture.md`): import (workbook to domain types), domain (pure calculations, one module per
-feature), API, UI. Cost rule: a standard cost per career level; when a person's real cost is known, it wins.
+feature), API, UI. Cost rule: two rates per career level, chosen by the
+type of work (chargeable or business development), each raised by the extra-time share of the level; when a person's
+real rates are known, they win.
+
+People come from one team registry that every engagement plan references by person id. It has three tables: people
+(one row each, stable attributes), level history (person, level, valid from: a promotion is a new row) and rates (per
+level, and optionally per person, each with its valid-from date). A fortnight is costed with the level and rates in
+force on its first day, so past actuals never change and a simulated promotion is a future row in a scenario.
 
 ## Rules
 

@@ -7,7 +7,6 @@ ideas stay.
 
 | Id | Date | Idea | Status |
 |---|---|---|---|
-| IDEA-1 | 30/10 | A web app where every project has its workbook, in a common format, with a forecast sheet and an actual sheet. (voice note 30/10) | proposed |
 | IDEA-2 | 30/10 | Per project: forecast against actual over time, what remains, how it is going, the margin. (voice note 30/10) | proposed |
 | IDEA-3 | 30/10 | Estimation rationale: estimation models and assumptions kept in one place, to see where projects assume differently and where risks are taken. (voice note 30/10) | proposed |
 | IDEA-4 | 30/10 | A 'whiteboard' sheet as the base: analysis plus forecast and actual for accounting; those sheets stay static, while the project database is where one moves around. (voice note 30/10) | proposed |
@@ -15,15 +14,16 @@ ideas stay.
 | IDEA-6 | 30/10 | A fixed structure; when a workbook has a different one, a set of base columns must always be importable. (voice note 30/10) | proposed |
 | IDEA-7 | 30/10 | Start with a minimal team of two people and their career levels, to build a first workbook and try the model end to end (synthetic people in the repository). (voice note 30/10) | proposed |
 | IDEA-8 | 30/10 | Draw the ideas and the layouts from the estimation workbook already used in practice: those layouts are what actually helps management; anonymised, with synthetic people. (voice note 30/10) | proposed |
+| IDEA-13 | 31/10 | Forecast and actual side by side: FTE, cost, days and cost per day for each, with the delta and the cumulative curves over time. (shared material 31/10) | proposed |
+| IDEA-14 | 31/10 | Coverage by area: the sold value of each area or business unit against its planned and actual cost. (shared material 31/10) | proposed |
+| IDEA-15 | 31/10 | Scenarios: copy the master plan into named simulations, compare them, keep old versions as an archive. (shared material 31/10) | proposed |
+| IDEA-16 | 31/10 | Top-down sizing from a sold amount: per release and stream, amount / day rate = days, days / (months x working days) = FTE; a shared cost split across releases by percentage; a fixed share of days for functional analysis and UAT. (shared material 31/10) | proposed |
+| IDEA-18 | 31/10 | More attributes in the team registry: role, skill, target unit, location, level, main client, flags (on the asset, candidate to move), primary and secondary activity. (shared material 31/10) | proposed |
+| IDEA-19 | 31/10 | Team view computed from the registry, not copied by hand into slides: counts by role, level, location and client, share of developers, managers. (shared material 31/10) | proposed |
+| IDEA-20 | 31/10 | Pipeline of engagements: status (prospect, starting, in progress, in production), expected go-live, size class (processes, volumes, with thresholds), service model; to see future demand on the team. To take up after the four modules of the README. (shared material 31/10) | proposed |
 
-Last id: IDEA-8
+Last id: IDEA-20
 
 ## Open questions
 
-- The README describes one yearly workbook with sheets Levels, People, Engagements, Allocations, Actuals, Budget; the voice note one workbook per project with forecast and actual. Which model holds, or do both exist? (voice note 30/10)
-- The workbook layout (the 'loads' sheet already designed) still has to be shared: it becomes the data contract in `specs/`. (voice note 30/10)
-- Mapping workbooks to the people we know: real people are personal data and never enter the repository. Where does that mapping live? (voice note 30/10)
-- Still local only (localhost), as the README says? (voice note 30/10)
-- Which material will the owner share (the estimation workbook layout, the product side, the projects)? The voice note stops halfway. (voice note 30/10)
-- Which stack: React + Node (first idea) or C# with ASP.NET Core (the preferred language)? To record as an ADR. (README, To do)
-- Confirm the standard cost per career level, together with the workbook layout of the data contract. (README, To do)
+None.
