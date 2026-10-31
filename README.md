@@ -100,7 +100,9 @@ Requires the .NET 10 SDK.
 - Run on the real data folder: set `DIAPASON_DATA_FOLDER` to the shared folder (or `Diapason:DataFolder` in
   `src/Diapason.Web/appsettings.json`) and start the app the same way. The app only reads the folder; "Ricarica" /
   "Reload" reads it again after a workbook is changed.
-- Empty templates to fill in: `pwsh -NoProfile -File tools/new-templates.ps1 -Folder <folder>`.
+- Empty templates to fill in: `pwsh -NoProfile -File tools/new-templates.ps1 -Folder <folder>`. They use the default
+  registry name `registry.xlsx`; copy `plan.xlsx` under a name of its own and fill its `Engagement` row before putting it
+  in the data folder.
 - Settings, section `Diapason` of `appsettings.json`: `DataFolder`, `RegistryFileName`, `HoursPerDay`, `Port`.
 
 ## Tests

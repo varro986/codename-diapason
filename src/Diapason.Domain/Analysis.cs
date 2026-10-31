@@ -24,7 +24,7 @@ public static class Analysis
             var planIssues = Rules.CheckPlan(source.Plan, registry, source.Workbook).ToList();
             if (seen.TryGetValue(source.Plan.EngagementId, out var first))
                 planIssues.Add(Issue.Error(IssueCode.DuplicateEngagement,
-                    new SourceLocation(source.Workbook, C.Engagement.Sheet, 2, C.Engagement.EngagementId),
+                    new SourceLocation(source.Workbook, C.Engagement.Sheet, source.Plan.Row, C.Engagement.EngagementId),
                     source.Plan.EngagementId, first));
             issues.AddRange(planIssues);
             if (planIssues.Any(i => i.Severity == Severity.Error)) continue;
@@ -46,7 +46,6 @@ public static class Analysis
             .Where(g => g.Sum(r => r.Row.Allocation) > 1)
             .OrderBy(g => g.Key.PersonId).ThenBy(g => g.Key.Fortnight)
             .Select(g => Issue.Warning(IssueCode.OverAllocation, null,
-                g.Key.PersonId!, Fortnights.Format(g.Key.Fortnight), g.Key.Kind.ToString(),
-                Rules.Number(g.Sum(r => r.Row.Allocation)),
+                g.Key.PersonId!, g.Key.Fortnight, g.Key.Kind, g.Sum(r => r.Row.Allocation),
                 string.Join(", ", g.Select(r => r.Workbook).Distinct())));
 }

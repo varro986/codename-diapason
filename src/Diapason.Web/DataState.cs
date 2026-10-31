@@ -36,7 +36,7 @@ public sealed class DataState(IOptions<DiapasonOptions> options, TimeProvider cl
             result.Errors, result.Warnings);
         foreach (var issue in result.Issues)
             logger.LogWarning("{Severity} {Code} at {Location}: {Args}", issue.Severity, issue.Code, issue.Location,
-                string.Join(" | ", issue.Args));
+                string.Join(" | ", issue.Args.Select(a => Convert.ToString(a, System.Globalization.CultureInfo.InvariantCulture))));
         return result;
     }
 }

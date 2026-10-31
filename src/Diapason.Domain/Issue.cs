@@ -33,11 +33,13 @@ public enum IssueCode
 
 public sealed record SourceLocation(string Workbook, string? Sheet = null, int? Row = null, string? Column = null);
 
-public sealed record Issue(Severity Severity, IssueCode Code, SourceLocation? Location, IReadOnlyList<string> Args)
+/// <param name="Args">Values for the message: text, <see cref="decimal"/>, <see cref="DateOnly"/> or <see cref="Kind"/>,
+/// formatted by the UI.</param>
+public sealed record Issue(Severity Severity, IssueCode Code, SourceLocation? Location, IReadOnlyList<object> Args)
 {
-    public static Issue Error(IssueCode code, SourceLocation? location, params string[] args) =>
+    public static Issue Error(IssueCode code, SourceLocation? location, params object[] args) =>
         new(Severity.Error, code, location, args);
 
-    public static Issue Warning(IssueCode code, SourceLocation? location, params string[] args) =>
+    public static Issue Warning(IssueCode code, SourceLocation? location, params object[] args) =>
         new(Severity.Warning, code, location, args);
 }

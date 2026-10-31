@@ -103,6 +103,6 @@ public class RulesTests
         var issue = Assert.Single(Rules.CheckRegistry(registry, "registry.xlsx"));
 
         Assert.Equal(IssueCode.CalendarGap, issue.Code);
-        Assert.Equal(["16/12/2026", "01/01/2027"], issue.Args);
+        Assert.Equal([D(2026, 12, 16), D(2027, 1, 1)], issue.Args);
     }
 }

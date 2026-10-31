@@ -56,6 +56,17 @@ public class CostingTests
     }
 
     [Fact]
+    public void Rates_of_a_level_change_on_their_date()
+    {
+        var registry = Team with { LevelRates = [.. Team.LevelRates, new LevelRate("L9", D(2026, 12, 16), 50m, 40m, 0.1m)] };
+
+        var rows = Costing.Cost(Example, registry, HoursPerDay);
+
+        Assert.Equal(44m * 40m * 1.2m, rows[0].Cost);
+        Assert.Equal(36m * 50m * 1.1m, rows[1].Cost);
+    }
+
+    [Fact]
     public void Open_position_uses_the_rates_of_its_level()
     {
         var position = new Assignment("A1", null, "L6", "Core", "Lead", Kind.Forecast, WorkType.Chargeable, 1m,

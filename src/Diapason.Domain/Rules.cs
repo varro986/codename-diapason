@@ -1,4 +1,3 @@
-using System.Globalization;
 using C = Diapason.Domain.DataContract;
 
 namespace Diapason.Domain;
@@ -10,10 +9,10 @@ public static class Rules
     {
         var issues = new List<Issue>();
         SourceLocation At(string sheet, int row, string column) => new(workbook, sheet, row, column);
-        void Error(IssueCode code, SourceLocation at, params string[] args) => issues.Add(Issue.Error(code, at, args));
+        void Error(IssueCode code, SourceLocation at, params object[] args) => issues.Add(Issue.Error(code, at, args));
         void Positive(decimal value, SourceLocation at)
         {
-            if (value <= 0) Error(IssueCode.OutOfRange, at, Number(value), "> 0");
+            if (value <= 0) Error(IssueCode.OutOfRange, at, value, "> 0");
         }
 
         var people = registry.People.Select(p => p.PersonId).ToHashSet();
@@ -39,7 +38,7 @@ public static class Rules
             Positive(r.BusinessDevelopmentRate, At(C.LevelRates.Sheet, r.Row, C.LevelRates.BusinessDevelopmentRate));
             if (r.ExtraTimeShare < 0)
                 Error(IssueCode.OutOfRange, At(C.LevelRates.Sheet, r.Row, C.LevelRates.ExtraTimeShare),
-                    Number(r.ExtraTimeShare), ">= 0");
+                    r.ExtraTimeShare, ">= 0");
         }
         foreach (var r in Duplicates(registry.LevelRates, r => (r.Level, r.ValidFrom)))
             Error(IssueCode.Duplicate, At(C.LevelRates.Sheet, r.Row, C.LevelRates.ValidFrom),
@@ -60,13 +59,13 @@ public static class Rules
         {
             if (!Fortnights.IsStart(f.Start))
                 Error(IssueCode.NotAFortnightStart, At(C.Calendar.Sheet, f.Row, C.Calendar.FortnightStart),
-                    Fortnights.Format(f.Start));
+                    f.Start);
             if (f.WorkingHours < 0)
                 Error(IssueCode.OutOfRange, At(C.Calendar.Sheet, f.Row, C.Calendar.WorkingHours),
-                    Number(f.WorkingHours), ">= 0");
+                    f.WorkingHours, ">= 0");
         }
         foreach (var f in Duplicates(registry.Calendar, f => f.Start))
-            Error(IssueCode.Duplicate, At(C.Calendar.Sheet, f.Row, C.Calendar.FortnightStart), Fortnights.Format(f.Start));
+            Error(IssueCode.Duplicate, At(C.Calendar.Sheet, f.Row, C.Calendar.FortnightStart), f.Start);
 
         // A gap would silently drop the hours of the missing fortnight from every assignment that spans it.
         var starts = registry.Calendar.Where(f => Fortnights.IsStart(f.Start)).DistinctBy(f => f.Start)
@@ -76,7 +75,7 @@ public static class Rules
             var expected = Fortnights.Next(starts[i - 1].Start);
             if (starts[i].Start != expected)
                 Error(IssueCode.CalendarGap, At(C.Calendar.Sheet, starts[i].Row, C.Calendar.FortnightStart),
-                    Fortnights.Format(expected), Fortnights.Format(starts[i].Start));
+                    expected, starts[i].Start);
         }
 
         return issues;
@@ -87,7 +86,7 @@ public static class Rules
     {
         var issues = new List<Issue>();
         SourceLocation At(string sheet, int row, string column) => new(workbook, sheet, row, column);
-        void Error(IssueCode code, SourceLocation at, params string[] args) => issues.Add(Issue.Error(code, at, args));
+        void Error(IssueCode code, SourceLocation at, params object[] args) => issues.Add(Issue.Error(code, at, args));
 
         var people = registry.People.Select(p => p.PersonId).ToHashSet();
         var levels = registry.LevelRates.Select(r => r.Level).ToHashSet();
@@ -97,7 +96,7 @@ public static class Rules
         var book = new RateBook(registry);
 
         foreach (var a in plan.Areas.Where(a => a.SoldValue < 0))
-            Error(IssueCode.OutOfRange, At(C.Areas.Sheet, a.Row, C.Areas.SoldValue), Number(a.SoldValue), ">= 0");
+            Error(IssueCode.OutOfRange, At(C.Areas.Sheet, a.Row, C.Areas.SoldValue), a.SoldValue, ">= 0");
         foreach (var a in Duplicates(plan.Areas, a => a.Name))
             Error(IssueCode.Duplicate, At(C.Areas.Sheet, a.Row, C.Areas.Area), a.Name);
         foreach (var a in Duplicates(plan.Assignments, a => a.AssignmentId))
@@ -118,14 +117,14 @@ public static class Rules
             if (!areas.Contains(a.Area))
                 Error(IssueCode.UnknownArea, Cell(C.Assignments.Area), a.Area);
             if (a.Allocation <= 0 || a.Allocation > 1)
-                Error(IssueCode.OutOfRange, Cell(C.Assignments.Allocation), Number(a.Allocation), "> 0, <= 1");
+                Error(IssueCode.OutOfRange, Cell(C.Assignments.Allocation), a.Allocation, "> 0, <= 1");
             if (!inCalendar.Contains(a.FirstFortnight))
-                Error(IssueCode.NotInCalendar, Cell(C.Assignments.FirstFortnight), Fortnights.Format(a.FirstFortnight));
+                Error(IssueCode.NotInCalendar, Cell(C.Assignments.FirstFortnight), a.FirstFortnight);
             if (!inCalendar.Contains(a.LastFortnight))
-                Error(IssueCode.NotInCalendar, Cell(C.Assignments.LastFortnight), Fortnights.Format(a.LastFortnight));
+                Error(IssueCode.NotInCalendar, Cell(C.Assignments.LastFortnight), a.LastFortnight);
             if (a.LastFortnight < a.FirstFortnight)
                 Error(IssueCode.LastBeforeFirst, Cell(C.Assignments.LastFortnight),
-                    Fortnights.Format(a.FirstFortnight), Fortnights.Format(a.LastFortnight));
+                    a.FirstFortnight, a.LastFortnight);
 
             // Levels and rates in force are checked only on an otherwise valid row: one cause, one message.
             if (issues.Count > before) continue;
@@ -134,12 +133,12 @@ public static class Rules
                 var level = a.Level ?? book.LevelOf(a.PersonId!, start);
                 if (level is null)
                 {
-                    Error(IssueCode.NoLevelInForce, Cell(C.Assignments.PersonId), a.PersonId!, Fortnights.Format(start));
+                    Error(IssueCode.NoLevelInForce, Cell(C.Assignments.PersonId), a.PersonId!, start);
                     break;
                 }
                 if (book.LevelRate(level, start) is null)
                 {
-                    Error(IssueCode.NoRateInForce, Cell(C.Assignments.FirstFortnight), level, Fortnights.Format(start));
+                    Error(IssueCode.NoRateInForce, Cell(C.Assignments.FirstFortnight), level, start);
                     break;
                 }
             }
@@ -149,6 +148,4 @@ public static class Rules
 
     private static IEnumerable<T> Duplicates<T, TKey>(IEnumerable<T> rows, Func<T, TKey> key) =>
         rows.GroupBy(key).SelectMany(g => g.Skip(1));
-
-    internal static string Number(decimal value) => value.ToString(CultureInfo.InvariantCulture);
 }

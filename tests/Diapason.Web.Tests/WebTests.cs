@@ -61,6 +61,50 @@ public class WebTests
     }
 
     [Fact]
+    public async Task The_page_starts_in_Italian_with_the_folder_already_read_and_switches_to_English()
+    {
+        using var temp = new TempFolder();
+        Generators.WriteSampleData(temp.Path);
+        var port = FreePort();
+        await using var app = Build(temp.Path, port);
+        await app.StartAsync(CancellationToken.None);
+        try
+        {
+            var cookies = new CookieContainer();
+            using var http = new HttpClient(new HttpClientHandler { CookieContainer = cookies, AllowAutoRedirect = false })
+            {
+                BaseAddress = new Uri($"http://localhost:{port}/"),
+            };
+
+            var italian = await http.GetStringAsync("/");
+            var switched = await http.GetAsync("/culture?name=en&redirect=/");
+            var english = await http.GetStringAsync("/");
+
+            Assert.Contains("Ricarica", italian);
+            Assert.Contains("3.840", italian);
+            Assert.Equal(HttpStatusCode.Redirect, switched.StatusCode);
+            Assert.Equal("/", switched.Headers.Location?.OriginalString);
+            Assert.Contains("Reload", english);
+            Assert.Contains("3.840", english);
+        }
+        finally
+        {
+            await app.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData("/", true)]
+    [InlineData("/not-found", true)]
+    [InlineData("//evil.example", false)]
+    [InlineData("/\\evil.example", false)]
+    [InlineData("https://evil.example", false)]
+    [InlineData("", false)]
+    [InlineData(null, false)]
+    public void The_language_link_redirects_only_to_paths_of_the_app(string? path, bool local) =>
+        Assert.Equal(local, DiapasonApp.IsLocalPath(path));
+
+    [Fact]
     public void The_environment_variable_overrides_the_data_folder()
     {
         using var temp = new TempFolder();

@@ -56,7 +56,7 @@ public class AnalysisTests
         var warning = Assert.Single(result.Issues);
         Assert.Equal(Severity.Warning, warning.Severity);
         Assert.Equal(IssueCode.OverAllocation, warning.Code);
-        Assert.Equal(["P2", "01/12/2026", "Forecast", "1.25", "e1.xlsx, e3.xlsx"], warning.Args);
+        Assert.Equal(["P2", D(2026, 12, 1), Kind.Forecast, 1.25m, "e1.xlsx, e3.xlsx"], warning.Args);
     }
 
     [Fact]

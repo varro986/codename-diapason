@@ -120,6 +120,50 @@ public class WorkbookTests
     }
 
     [Fact]
+    public void Formulas_are_read_by_their_value_and_numbers_are_refused_as_dates()
+    {
+        using var temp = new TempFolder();
+        var path = temp.File("p.xlsx");
+        WorkbookWriter.WritePlan(path, Example);
+        using (var book = new XLWorkbook(path))
+        {
+            var sheet = book.Worksheet("Assignments");
+            sheet.Cell(2, 8).FormulaA1 = "=1/4";
+            // A plain number, not formatted as a date: a value typed in the wrong cell.
+            sheet.Cell(2, 10).Value = 0.5;
+            sheet.Cell(2, 10).Style.NumberFormat.NumberFormatId = 0;
+            // As Excel does when it saves: the result of each formula is stored next to it.
+            book.RecalculateAllFormulas();
+            book.Save();
+        }
+
+        var (plan, issues) = ReadPlan(path);
+
+        Assert.Null(plan);
+        var issue = Assert.Single(issues);
+        Assert.Equal((IssueCode.NotADate, "LastFortnight"), (issue.Code, issue.Location?.Column));
+    }
+
+    [Fact]
+    public void A_row_of_spaces_counts_as_empty()
+    {
+        using var temp = new TempFolder();
+        var path = temp.File("p.xlsx");
+        WorkbookWriter.WritePlan(path, Example);
+        using (var book = new XLWorkbook(path))
+        {
+            book.Worksheet("Assignments").Cell(3, 1).Value = "   ";
+            book.Worksheet("Assignments").Cell(3, 5).Value = " ";
+            book.Save();
+        }
+
+        var (plan, issues) = ReadPlan(path);
+
+        Assert.Empty(issues);
+        Assert.Single(plan!.Assignments);
+    }
+
+    [Fact]
     public void Engagement_sheet_needs_exactly_one_row()
     {
         using var temp = new TempFolder();

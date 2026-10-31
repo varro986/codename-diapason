@@ -61,8 +61,8 @@ public static class DataFolderLoader
             issues.AddRange(found);
             return value;
         }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException or InvalidDataException
-                                      or FormatException or ArgumentException or InvalidOperationException)
+        // Any failure of one workbook (locked, corrupt, half saved) is its issue: the other workbooks still load.
+        catch (Exception e) when (e is not OutOfMemoryException)
         {
             issues.Add(Issue.Error(IssueCode.WorkbookUnreadable, new SourceLocation(name), e.Message));
             return null;

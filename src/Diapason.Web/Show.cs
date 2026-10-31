@@ -17,5 +17,13 @@ public static class Show
     public static string Moment(DateTimeOffset value) => value.ToString("dd/MM/yyyy HH:mm", DiapasonApp.Numbers);
 
     public static string Message(IStringLocalizer<Texts> texts, Issue issue) =>
-        texts[$"Issue_{issue.Code}", [.. issue.Args]];
+        texts[$"Issue_{issue.Code}", [.. issue.Args.Select(a => Argument(texts, a))]];
+
+    private static string Argument(IStringLocalizer<Texts> texts, object value) => value switch
+    {
+        decimal n => n.ToString("0.##", DiapasonApp.Numbers),
+        DateOnly d => Fortnights.Format(d),
+        Kind k => texts[k.ToString()],
+        _ => value.ToString() ?? "",
+    };
 }

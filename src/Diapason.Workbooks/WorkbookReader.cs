@@ -46,10 +46,10 @@ public static class WorkbookReader
 
         if (book.TryGetWorksheet(C.Engagement.Sheet, out _) && engagement.Count != 1 && issues.Count == 0)
             issues.Add(Issue.Error(IssueCode.OneRowExpected, new(workbook, C.Engagement.Sheet),
-                engagement.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                (decimal)engagement.Count));
 
         if (issues.Any(i => i.Severity == Severity.Error)) return (null, issues);
-        var (id, name, _) = engagement[0];
-        return (new Plan(id, name, areas, assignments), issues);
+        var (id, name, row) = engagement[0];
+        return (new Plan(id, name, areas, assignments, row), issues);
     }
 }

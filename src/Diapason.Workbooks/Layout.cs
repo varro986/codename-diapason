@@ -1,4 +1,3 @@
-using Diapason.Domain;
 using C = Diapason.Domain.DataContract;
 
 namespace Diapason.Workbooks;
@@ -35,10 +34,4 @@ internal static class Layout
         C.Assignments.Kind, C.Assignments.WorkType, C.Assignments.Allocation, C.Assignments.FirstFortnight,
         C.Assignments.LastFortnight,
     ]);
-
-    public static readonly Sheet[] Registry = [People, LevelHistory, LevelRates, PersonRates, Calendar];
-
-    public static readonly Sheet[] Plan = [Engagement, Areas, Assignments];
-
-    public static IReadOnlyList<string> Values<T>() where T : struct, Enum => Enum.GetNames<T>();
 }

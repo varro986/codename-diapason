@@ -27,7 +27,7 @@ public static class DiapasonApp
                 var folder = builder.Configuration[DiapasonOptions.DataFolderVariable];
                 if (!string.IsNullOrWhiteSpace(folder)) o.DataFolder = folder;
             });
-        var port = builder.Configuration.GetSection(DiapasonOptions.Section).Get<DiapasonOptions>()?.Port ?? new DiapasonOptions().Port;
+        var port = builder.Configuration.GetValue<int>($"{DiapasonOptions.Section}:{nameof(DiapasonOptions.Port)}");
         // Loopback only, whatever ASPNETCORE_URLS says: the data are personal (README, "Rules").
         builder.WebHost.ConfigureKestrel(k => k.ListenLocalhost(port));
 
@@ -55,9 +55,7 @@ public static class DiapasonApp
                 http.Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
                     CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(name)),
                     new CookieOptions { MaxAge = TimeSpan.FromDays(365), HttpOnly = true, SameSite = SameSiteMode.Lax });
-            // Only local paths, so the link cannot send anyone elsewhere.
-            return Results.LocalRedirect(redirect is { Length: > 0 } && redirect.StartsWith('/') && !redirect.StartsWith("//")
-                ? redirect : "/");
+            return Results.LocalRedirect(IsLocalPath(redirect) ? redirect! : "/");
         });
         app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
@@ -65,4 +63,9 @@ public static class DiapasonApp
         app.Lifetime.ApplicationStarted.Register(() => _ = app.Services.GetRequiredService<DataState>().Current);
         return app;
     }
+
+    /// <summary>Only a path of this app: the language link can never send anyone elsewhere.</summary>
+    public static bool IsLocalPath(string? path) =>
+        path is { Length: > 0 } && path[0] == '/' && (path.Length == 1 || path[1] is not ('/' or '\\')) &&
+        Uri.IsWellFormedUriString(path, UriKind.Relative);
 }

@@ -116,6 +116,8 @@ FTE, cost per day, totals by area, by month and by year are sums of these rows.
 
 Every rule in the tables above, plus:
 
+- the `Calendar` has no gaps: each fortnight is followed by the next one, otherwise the hours of the missing fortnight
+  would silently drop out of every assignment that spans it;
 - every fortnight of an assignment has a `Calendar` row and a level and rates in force on its first day;
 - the allocation of one person in one fortnight, over all plans and per `Kind`, is at most 1 (a warning, not an error).
 

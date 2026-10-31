@@ -89,6 +89,21 @@ public class DataFolderLoaderTests
     }
 
     [Fact]
+    public void A_zip_with_broken_content_is_an_issue_not_a_crash()
+    {
+        using var temp = new TempFolder();
+        Generators.WriteSampleData(temp.Path);
+        using (var zip = System.IO.Compression.ZipFile.Open(temp.File("broken.xlsx"), System.IO.Compression.ZipArchiveMode.Create))
+        using (var writer = new StreamWriter(zip.CreateEntry("[Content_Types].xml").Open()))
+            writer.Write("<Types><not closed");
+
+        var result = Load(temp.Path);
+
+        Assert.Contains(result.Issues, i => i.Code == IssueCode.WorkbookUnreadable && i.Location?.Workbook == "broken.xlsx");
+        Assert.Equal(2, result.Overview!.Engagements.Count);
+    }
+
+    [Fact]
     public void Loading_never_changes_the_data_folder()
     {
         using var temp = new TempFolder();

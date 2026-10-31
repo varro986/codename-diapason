@@ -44,7 +44,7 @@ internal sealed class SheetReader
         for (var number = 2; number <= last; number++)
         {
             var row = new Row(this, _sheet.Row(number), number);
-            if (_layout.Columns.All(c => row.Value(c).IsBlank)) continue;
+            if (_layout.Columns.All(c => row.OptionalText(c) is null)) continue;
             var before = _issues.Count;
             var value = read(row);
             if (_issues.Count == before) result.Add(value);
@@ -59,7 +59,17 @@ internal sealed class SheetReader
         public XLCellValue Value(string column)
         {
             var cell = row.Cell(reader._columns[column]);
-            return cell.HasFormula ? cell.CachedValue : cell.Value;
+            if (!cell.HasFormula) return cell.Value;
+            // Excel stores the result of each formula; a workbook saved by another tool may not, so it is computed.
+            if (!cell.CachedValue.IsBlank) return cell.CachedValue;
+            try
+            {
+                return cell.Value;
+            }
+            catch (Exception e) when (e is not OutOfMemoryException)
+            {
+                return Blank.Value;
+            }
         }
 
         public string? OptionalText(string column)
@@ -80,20 +90,20 @@ internal sealed class SheetReader
         public decimal Number(string column)
         {
             var value = Value(column);
-            if (value.IsNumber) return (decimal)value.GetNumber();
-            Report(value.IsBlank ? IssueCode.ValueRequired : IssueCode.NotANumber, column, Shown(value));
+            if (value.IsNumber && Math.Abs(value.GetNumber()) < 1e15) return (decimal)value.GetNumber();
+            Report(IsEmpty(value) ? IssueCode.ValueRequired : IssueCode.NotANumber, column, Shown(value));
             return 0;
         }
 
         public DateOnly Date(string column)
         {
             var value = Value(column);
+            // A plain number is refused: in a date column it is almost always a value typed in the wrong cell.
             if (value.IsDateTime) return DateOnly.FromDateTime(value.GetDateTime());
-            if (value.IsNumber) return DateOnly.FromDateTime(DateTime.FromOADate(value.GetNumber()));
             if (value.IsText && DateOnly.TryParseExact(value.GetText().Trim(), DateFormats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var date))
                 return date;
-            Report(value.IsBlank ? IssueCode.ValueRequired : IssueCode.NotADate, column, Shown(value));
+            Report(IsEmpty(value) ? IssueCode.ValueRequired : IssueCode.NotADate, column, Shown(value));
             return default;
         }
 
@@ -103,12 +113,14 @@ internal sealed class SheetReader
             if (text.Length == 0) return default;
             if (Enum.TryParse<T>(text, ignoreCase: true, out var choice) && Enum.IsDefined(choice) && !int.TryParse(text, out _))
                 return choice;
-            Report(IssueCode.NotAllowed, column, text, string.Join(", ", Layout.Values<T>()));
+            Report(IssueCode.NotAllowed, column, text, string.Join(", ", Enum.GetNames<T>()));
             return default;
         }
 
-        private void Report(IssueCode code, string column, params string[] args) =>
+        private void Report(IssueCode code, string column, params object[] args) =>
             reader._issues.Add(Issue.Error(code, new(reader._workbook, reader._layout.Name, number, column), args));
+
+        private static bool IsEmpty(XLCellValue value) => value.IsBlank || (value.IsText && string.IsNullOrWhiteSpace(value.GetText()));
 
         private static string Shown(XLCellValue value) => value.IsBlank ? "" : value.ToString(CultureInfo.InvariantCulture);
     }

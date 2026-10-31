@@ -46,7 +46,8 @@ public sealed record Assignment(
     DateOnly LastFortnight,
     int Row = 0);
 
-public sealed record Plan(string EngagementId, string Name, IReadOnlyList<Area> Areas, IReadOnlyList<Assignment> Assignments)
+public sealed record Plan(
+    string EngagementId, string Name, IReadOnlyList<Area> Areas, IReadOnlyList<Assignment> Assignments, int Row = 0)
 {
     public static Plan Empty { get; } = new("", "", [], []);
 }
