@@ -3,7 +3,16 @@
 Status: accepted (31/10/2026). The layout of the two kinds of workbook Diapason reads: the team registry
 (one) and the engagement plans (one per engagement). Both stay outside the repository; the example below is synthetic.
 
-Common rules: one table per sheet, headers in row 1, names exactly as written here; extra columns and sheets are
+## Data folder
+
+All workbooks sit in one folder, shared by everyone who runs the app; the app only reads it. Its path comes from
+configuration, overridden by the environment variable `DIAPASON_DATA_FOLDER`. The registry is the file whose name is
+in configuration (default `registry.xlsx`); every other `.xlsx` in the folder (not in subfolders) is an engagement plan.
+Excel lock files (`~$*.xlsx`) are skipped.
+
+## Common rules
+
+One table per sheet, headers in row 1, names exactly as written here; extra columns and sheets are
 ignored; dates are calendar dates; amounts in euro; shares as decimals (`0.25` is 25%).
 
 ## Team registry
@@ -14,6 +23,9 @@ ignored; dates are calendar dates; amounts in euro; shares as decimals (`0.25` i
 |---|---|---|
 | `PersonId` | text | unique |
 | `DisplayName` | text | |
+
+Optional columns, used from module 2 on: `Role`, `Skill`, `TargetUnit`, `Location`, `MainClient`, `OnAsset` and
+`CandidateToMove` (`Yes` or empty), `PrimaryActivity`, `SecondaryActivity`.
 
 ### `LevelHistory`
 
@@ -90,7 +102,7 @@ One row per assignment; a person can have several.
 
 ## Calculation
 
-For each assignment and each fortnight `f` from `FirstFortnight` to `LastFortnight`:
+For each assignment and each `Calendar` fortnight `f` from `FirstFortnight` to `LastFortnight`, both included:
 
 - `hours = WorkingHours(f) x Allocation`; `days = hours / hours per day` (8, from configuration).
 - Level: the open position's `Level`, or the person's `LevelHistory` row in force on the first day of `f`.
@@ -107,7 +119,8 @@ Every rule in the tables above, plus:
 - every fortnight of an assignment has a `Calendar` row and a level and rates in force on its first day;
 - the allocation of one person in one fortnight, over all plans and per `Kind`, is at most 1 (a warning, not an error).
 
-An error names workbook, sheet, row and column, and says what to fix; a plan with errors is not loaded.
+An error names workbook, sheet, row and column, and says what to fix. A plan with errors is not loaded; a registry
+with errors loads nothing, since every plan depends on it.
 
 ## Example (synthetic)
 
