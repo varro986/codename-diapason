@@ -1,0 +1,21 @@
+@inherits LayoutComponentBase
+@inject IStringLocalizer<Texts> T
+@inject NavigationManager Navigation
+
+<nav class="languages" aria-label="@T["Language"]">
+    @foreach (var culture in DiapasonApp.Cultures)
+    {
+        <a href="@($"culture?name={culture.Name}&redirect={Uri.EscapeDataString("/" + Navigation.ToBaseRelativePath(Navigation.Uri))}")"
+           class="@(culture.Name == System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName ? "current" : "")"
+           data-enhance-nav="false">@culture.Name.ToUpperInvariant()</a>
+    }
+</nav>
+
+<main>
+    @Body
+</main>
+
+<div id="blazor-error-ui" data-nosnippet>
+    @T["ErrorPage"]
+    <a href="." class="reload">@T["Reload"]</a>
+</div>

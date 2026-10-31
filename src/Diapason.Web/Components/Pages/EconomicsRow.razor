@@ -1,0 +1,18 @@
+<tr>
+    <th scope="row">@Label</th>
+    <td class="num">@Show.Money(Forecast.Sold)</td>
+    @foreach (var f in new[] { Forecast, Actual })
+    {
+        <td class="num">@Show.Days(f.Days)</td>
+        <td class="num">@Show.Money(f.Cost)</td>
+        <td class="num @(f.Margin < 0 ? "negative" : "")">@Show.Money(f.Margin)</td>
+        <td class="num">@Show.Share(f.MarginShare)</td>
+        <td class="num">@Show.Ratio(f.Coverage)</td>
+    }
+</tr>
+
+@code {
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter, EditorRequired] public Figures Forecast { get; set; } = Figures.Zero;
+    [Parameter, EditorRequired] public Figures Actual { get; set; } = Figures.Zero;
+}

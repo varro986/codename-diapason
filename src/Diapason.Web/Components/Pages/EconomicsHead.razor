@@ -1,0 +1,24 @@
+@inject IStringLocalizer<Texts> T
+
+<thead>
+    <tr>
+        <th rowspan="2">@FirstColumn</th>
+        <th rowspan="2" class="num">@T["Sold"]</th>
+        <th colspan="5" class="group">@T["Forecast"]</th>
+        <th colspan="5" class="group">@T["Actual"]</th>
+    </tr>
+    <tr>
+        @for (var i = 0; i < 2; i++)
+        {
+            <th class="num">@T["Days"]</th>
+            <th class="num">@T["Cost"]</th>
+            <th class="num">@T["Margin"]</th>
+            <th class="num">@T["MarginShare"]</th>
+            <th class="num">@T["Coverage"]</th>
+        }
+    </tr>
+</thead>
+
+@code {
+    [Parameter, EditorRequired] public string FirstColumn { get; set; } = "";
+}

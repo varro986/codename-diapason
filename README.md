@@ -53,23 +53,30 @@ codename-diapason/
 |-- LICENSE           MIT
 |-- SECURITY.md       how to report a vulnerability
 |-- CODE_OF_CONDUCT.md
-|-- specs/            brainstorming.md; architecture as it comes
+|-- Diapason.slnx     the solution; Directory.Build.props holds the settings shared by every project
+|-- specs/            brainstorming.md, data-contract.md
 |   |-- features/     one folder per feature: spec.md, plan.md with its tasks
 |   \-- decisions/    ADRs
-|-- src/              source code
-|-- tests/            tests, from the acceptance criteria
-|-- tools/            deterministic tools for agents and people
-|-- cicd/             local checks run before every push (added with the first code)
+|-- src/
+|   |-- Diapason.Domain/     types of the data contract, rules, costing, economics; no I/O
+|   |-- Diapason.Workbooks/  reads and writes .xlsx (ClosedXML), loads the data folder
+|   |-- Diapason.Web/        ASP.NET Core + Blazor on localhost, texts in Resources/ (it, en)
+|   \-- Diapason.Tool/       command line for templates and synthetic data
+|-- tests/            one test project per src project, from the acceptance criteria
+|-- tools/            new-templates.ps1, new-sample-data.ps1
+|-- cicd/             run.ps1: the checks run before every push and in CI
 |-- .claude/          settings.json: permissions of coding assistants
 |-- .githooks/        pre-commit: gitleaks on staged files
-|-- .github/          CI (gitleaks), issue and PR templates, Dependabot
+|-- .github/          CI (gitleaks; cicd/run.ps1 on pull requests), issue and PR templates, Dependabot
 |-- .gitleaks.toml    secret scan rules
 |-- .gitignore        keeps workbooks, exports and local data out of git
 \-- .editorconfig     shared editor settings
 ```
 
-Four layers (to be detailed in `specs/architecture.md`): import (workbook to domain types), domain (pure calculations, one module per
-feature), API, UI. Cost rule: two rates per career level, chosen by the
+Flow: the web app asks `Diapason.Workbooks` to load the data folder; each workbook becomes domain types plus the
+issues of its cells, the domain checks the rules of the data contract, costs every assignment fortnight by fortnight and
+sums sold, cost and margin by area, engagement and total. A workbook with errors is left out and its errors are shown
+with workbook, sheet, row and column. Cost rule: two rates per career level, chosen by the
 type of work (chargeable or business development), each raised by the extra-time share of the level; when a person's
 real rates are known, they win.
 
@@ -84,3 +91,19 @@ force on its first day, so past actuals never change and a simulated promotion i
   test fixtures. Tests use synthetic data only.
 - **Local only**: the app binds to `localhost`; no telemetry, no external calls.
 
+## Usage
+
+Requires the .NET 10 SDK.
+
+- Run with the synthetic data: `pwsh -NoProfile -File tools/new-sample-data.ps1` (writes `data/sample/`, ignored by
+  git), then `dotnet run --project src/Diapason.Web` and open `http://localhost:5188`.
+- Run on the real data folder: set `DIAPASON_DATA_FOLDER` to the shared folder (or `Diapason:DataFolder` in
+  `src/Diapason.Web/appsettings.json`) and start the app the same way. The app only reads the folder; "Ricarica" /
+  "Reload" reads it again after a workbook is changed.
+- Empty templates to fill in: `pwsh -NoProfile -File tools/new-templates.ps1 -Folder <folder>`.
+- Settings, section `Diapason` of `appsettings.json`: `DataFolder`, `RegistryFileName`, `HoursPerDay`, `Port`.
+
+## Tests
+
+`pwsh -NoProfile -File cicd/run.ps1`: build with warnings as errors, `dotnet format` check, all tests. One test:
+`dotnet test --filter "FullyQualifiedName~CostingTests"`. CI runs the same script on every pull request.

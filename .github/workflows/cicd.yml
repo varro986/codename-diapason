@@ -1,0 +1,17 @@
+name: cicd
+on: [pull_request]
+
+# read-only: the job only reads the repository
+permissions:
+  contents: read
+
+# The same steps as on the machine before every push (cicd/run.ps1), also on Linux.
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: pwsh -NoProfile -File cicd/run.ps1

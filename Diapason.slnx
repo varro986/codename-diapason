@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Diapason.Domain/Diapason.Domain.csproj" />
+    <Project Path="src/Diapason.Tool/Diapason.Tool.csproj" />
+    <Project Path="src/Diapason.Web/Diapason.Web.csproj" />
+    <Project Path="src/Diapason.Workbooks/Diapason.Workbooks.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Diapason.Domain.Tests/Diapason.Domain.Tests.csproj" />
+    <Project Path="tests/Diapason.Web.Tests/Diapason.Web.Tests.csproj" />
+    <Project Path="tests/Diapason.Workbooks.Tests/Diapason.Workbooks.Tests.csproj" />
+  </Folder>
+</Solution>

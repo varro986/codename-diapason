@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Subtitle" xml:space="preserve"><value>Quello che il team vende copre quello che costa?</value></data>
+  <data name="Reload" xml:space="preserve"><value>Ricarica</value></data>
+  <data name="ReadAt" xml:space="preserve"><value>Cartella {0}, letta il {1}</value></data>
+  <data name="Language" xml:space="preserve"><value>Lingua</value></data>
+  <data name="Overall" xml:space="preserve"><value>Tutti i progetti</value></data>
+  <data name="EngagementTotal" xml:space="preserve"><value>Totale</value></data>
+  <data name="Engagement" xml:space="preserve"><value>Progetto</value></data>
+  <data name="Area" xml:space="preserve"><value>Area</value></data>
+  <data name="Sold" xml:space="preserve"><value>Venduto</value></data>
+  <data name="Forecast" xml:space="preserve"><value>Forecast</value></data>
+  <data name="Actual" xml:space="preserve"><value>Actual</value></data>
+  <data name="Days" xml:space="preserve"><value>Giornate</value></data>
+  <data name="Cost" xml:space="preserve"><value>Costo</value></data>
+  <data name="Margin" xml:space="preserve"><value>Margine</value></data>
+  <data name="MarginShare" xml:space="preserve"><value>Margine %</value></data>
+  <data name="Coverage" xml:space="preserve"><value>Copertura</value></data>
+  <data name="Issues" xml:space="preserve"><value>Da correggere</value></data>
+  <data name="NoIssues" xml:space="preserve"><value>Nessun problema: ogni file rispetta il formato.</value></data>
+  <data name="NoData" xml:space="preserve"><value>Nessun progetto da mostrare: vedi sotto cosa correggere.</value></data>
+  <data name="Error" xml:space="preserve"><value>Errore</value></data>
+  <data name="Warning" xml:space="preserve"><value>Avviso</value></data>
+  <data name="Workbook" xml:space="preserve"><value>File</value></data>
+  <data name="Sheet" xml:space="preserve"><value>Foglio</value></data>
+  <data name="Row" xml:space="preserve"><value>Riga</value></data>
+  <data name="Column" xml:space="preserve"><value>Colonna</value></data>
+  <data name="Message" xml:space="preserve"><value>Cosa fare</value></data>
+  <data name="NotFound" xml:space="preserve"><value>Questa pagina non esiste.</value></data>
+  <data name="ErrorPage" xml:space="preserve"><value>Qualcosa non ha funzionato. Il log dice cosa è successo.</value></data>
+  <data name="Issue_FolderMissing" xml:space="preserve"><value>La cartella dati {0} non esiste: creala o imposta DIAPASON_DATA_FOLDER.</value></data>
+  <data name="Issue_RegistryMissing" xml:space="preserve"><value>Manca l'anagrafica {0}: mettila nella cartella dati (tools/new-templates.ps1 ne crea una vuota).</value></data>
+  <data name="Issue_WorkbookUnreadable" xml:space="preserve"><value>Il file non si riesce a leggere ({0}): salvalo di nuovo come .xlsx.</value></data>
+  <data name="Issue_SheetMissing" xml:space="preserve"><value>Manca il foglio {0}: aggiungilo come nel formato.</value></data>
+  <data name="Issue_ColumnMissing" xml:space="preserve"><value>Manca la colonna {0} nella riga 1: aggiungila come nel formato.</value></data>
+  <data name="Issue_ValueRequired" xml:space="preserve"><value>Qui serve un valore.</value></data>
+  <data name="Issue_NotANumber" xml:space="preserve"><value>'{0}' non è un numero: scrivi un numero.</value></data>
+  <data name="Issue_NotADate" xml:space="preserve"><value>'{0}' non è una data: scrivi una data (gg/mm/aaaa).</value></data>
+  <data name="Issue_NotAllowed" xml:space="preserve"><value>'{0}' non è ammesso: usa uno tra {1}.</value></data>
+  <data name="Issue_Duplicate" xml:space="preserve"><value>{0} compare più di una volta: tieni una riga sola.</value></data>
+  <data name="Issue_UnknownPerson" xml:space="preserve"><value>La persona {0} non è in People: aggiungila all'anagrafica o correggi l'identificativo.</value></data>
+  <data name="Issue_UnknownLevel" xml:space="preserve"><value>Il livello {0} non ha tariffe in LevelRates: aggiungile o correggi il livello.</value></data>
+  <data name="Issue_UnknownArea" xml:space="preserve"><value>L'area {0} non è in Areas: aggiungila o correggi il nome.</value></data>
+  <data name="Issue_OutOfRange" xml:space="preserve"><value>{0} è fuori dai limiti: deve essere {1}.</value></data>
+  <data name="Issue_NotAFortnightStart" xml:space="preserve"><value>{0} non è un inizio di quindicina: usa il giorno 1 o 16 del mese.</value></data>
+  <data name="Issue_CalendarGap" xml:space="preserve"><value>Il calendario salta {0} prima di {1}: aggiungi le quindicine mancanti.</value></data>
+  <data name="Issue_NotInCalendar" xml:space="preserve"><value>{0} non è nel Calendar: aggiungila lì o usa una quindicina che c'è.</value></data>
+  <data name="Issue_LastBeforeFirst" xml:space="preserve"><value>L'ultima quindicina {1} viene prima della prima {0}: correggine una.</value></data>
+  <data name="Issue_PersonOrLevel" xml:space="preserve"><value>Scrivi PersonId per una persona o Level per una posizione aperta: uno dei due.</value></data>
+  <data name="Issue_OneRowExpected" xml:space="preserve"><value>Il foglio Engagement deve avere una riga sola; ne ha {0}.</value></data>
+  <data name="Issue_DuplicateEngagement" xml:space="preserve"><value>Il progetto {0} è già in {1}: dai a questo piano un suo identificativo.</value></data>
+  <data name="Issue_NoLevelInForce" xml:space="preserve"><value>La persona {0} non ha un livello in vigore il {1}: aggiungi una riga in LevelHistory.</value></data>
+  <data name="Issue_NoRateInForce" xml:space="preserve"><value>Il livello {0} non ha tariffe in vigore il {1}: aggiungi una riga in LevelRates.</value></data>
+  <data name="Issue_OverAllocation" xml:space="preserve"><value>{0} è allocato {3} nella quindicina del {1} ({2}) tra {4}: controlla le allocazioni.</value></data>
+</root>

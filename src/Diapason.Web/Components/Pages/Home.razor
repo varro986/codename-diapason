@@ -1,0 +1,102 @@
+@page "/"
+@rendermode InteractiveServer
+@implements IDisposable
+@inject DataState State
+@inject IStringLocalizer<Texts> T
+
+<PageTitle>Diapason</PageTitle>
+
+<header>
+    <div>
+        <h1>Diapason</h1>
+        <p class="subtitle">@T["Subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button @onclick="() => State.Reload()">@T["Reload"]</button>
+        <p class="read-at">@T["ReadAt", Path.GetFullPath(Result.Folder), Show.Moment(Result.LoadedAt)]</p>
+    </div>
+</header>
+
+@if (Result.Overview is { Engagements.Count: > 0 } overview)
+{
+    <section>
+        <h2>@T["Overall"]</h2>
+        <table>
+            <EconomicsHead FirstColumn="@T["Engagement"]" />
+            <tbody>
+                @foreach (var e in overview.Engagements)
+                {
+                    <EconomicsRow Label="@($"{e.EngagementId} · {e.Name}")" Forecast="e.Forecast" Actual="e.Actual" />
+                }
+            </tbody>
+            <tfoot>
+                <EconomicsRow Label="@T["EngagementTotal"]" Forecast="overview.Forecast" Actual="overview.Actual" />
+            </tfoot>
+        </table>
+    </section>
+
+    @foreach (var e in overview.Engagements)
+    {
+        <section>
+            <h2>@e.EngagementId · @e.Name <small>@e.Workbook</small></h2>
+            <table>
+                <EconomicsHead FirstColumn="@T["Area"]" />
+                <tbody>
+                    @foreach (var a in e.Areas)
+                    {
+                        <EconomicsRow Label="@a.Area" Forecast="a.Forecast" Actual="a.Actual" />
+                    }
+                </tbody>
+                <tfoot>
+                    <EconomicsRow Label="@T["EngagementTotal"]" Forecast="e.Forecast" Actual="e.Actual" />
+                </tfoot>
+            </table>
+        </section>
+    }
+}
+else
+{
+    <p class="empty">@T["NoData"]</p>
+}
+
+<section>
+    <h2>@T["Issues"]</h2>
+    @if (Result.Issues.Count == 0)
+    {
+        <p>@T["NoIssues"]</p>
+    }
+    else
+    {
+        <table class="issues">
+            <thead>
+                <tr>
+                    <th></th><th>@T["Workbook"]</th><th>@T["Sheet"]</th><th>@T["Row"]</th><th>@T["Column"]</th>
+                    <th>@T["Message"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var issue in Result.Issues)
+                {
+                    <tr class="@issue.Severity.ToString().ToLowerInvariant()">
+                        <td>@T[issue.Severity.ToString()]</td>
+                        <td>@issue.Location?.Workbook</td>
+                        <td>@issue.Location?.Sheet</td>
+                        <td>@issue.Location?.Row</td>
+                        <td>@issue.Location?.Column</td>
+                        <td>@Show.Message(T, issue)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@code {
+    private LoadResult Result => State.Current;
+
+    protected override void OnInitialized() => State.Changed += OnChanged;
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => State.Changed -= OnChanged;
+}

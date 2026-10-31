@@ -318,4 +318,6 @@ None yet beyond the common rules. What the product is: `README.md`; what it must
 
 ## Verification
 
-Commands the orchestrator runs before a commit: none yet (no code). They are added here with the first code.
+Before a commit: `pwsh -NoProfile -File cicd/run.ps1` (build with warnings as errors, format check, tests).
+Synthetic data for a manual check: `pwsh -NoProfile -File tools/new-sample-data.ps1`, then
+`dotnet run --project src/Diapason.Web`.
