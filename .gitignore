@@ -36,3 +36,8 @@ desktop.ini
 *.xlsm
 *.xls
 *.csv
+
+# session resume files of the owner's machines (claude --resume ...)
+session.ps1
+covenant.ps1
+zion.ps1
